@@ -3,8 +3,8 @@
 ===============================================================================
 Advanced Data Analysis
 ===============================================================================
-	1. Changes Over Time
-	2. Cumulative Analysis
+    1. Changes Over Time
+    2. Cumulative Analysis
     3. Performance Analysis
     4. Part-to-Whole Analysis
     5. Data Segmentation
@@ -20,7 +20,7 @@ Changes Over Time
 
 -- Sales by Year
 SELECT 
-	YEAR(order_date) AS order_year,
+    YEAR(order_date) AS order_year,
     SUM(sales_amount) AS total_sales,
     COUNT(DISTINCT customer_key) AS total_customers,
     SUM(quantity) AS total_quantity
@@ -31,7 +31,7 @@ ORDER BY YEAR(order_date);
 
 -- Sales by Month
 SELECT 
-	MONTH(order_date) AS order_month,
+    MONTH(order_date) AS order_month,
     SUM(sales_amount) AS total_sales,
     COUNT(DISTINCT customer_key) AS total_customers,
     SUM(quantity) AS total_quantity
@@ -43,7 +43,7 @@ ORDER BY MONTH(order_date);
 
 -- Sales by Year,Month
 SELECT 
-	DATE_FORMAT(order_date, '%y-%m-01') as order_date,
+    DATE_FORMAT(order_date, '%y-%m-01') as order_date,
     SUM(sales_amount) AS total_sales,
     COUNT(DISTINCT customer_key) AS total_customers,
     SUM(quantity) AS total_quantity
@@ -64,7 +64,7 @@ Cumulative Analysis
 -- Calculate the total sales per month
 -- and the running total of sales over time
 SELECT 
-	order_date,
+    order_date,
     total_sales,
     SUM(total_sales) OVER(ORDER BY order_date) AS running_total_sales,
     round(AVG(avg_price) OVER(ORDER BY order_date)) AS moving_avg_price
@@ -81,7 +81,7 @@ FROM (
  
 -- Same as the previous query, but here I want the year-wise running total.
 SELECT 
-	order_date,
+    order_date,
     total_sales,
     SUM(total_sales) OVER(PARTITION BY YEAR(order_date) ORDER BY order_date) AS running_total_sales
 FROM (	
@@ -118,22 +118,22 @@ WITH yearly_product_sales AS
     )
 
 SELECT
-	order_year,
+    order_year,
     product_name,
     current_sales,
     ROUND(AVG(current_sales) OVER(PARTITION BY product_name)) AS avg_sales,
     current_sales - ROUND(AVG(current_sales) OVER(PARTITION BY product_name))  AS diff_avg,
     CASE WHEN current_sales - ROUND(AVG(current_sales) OVER(PARTITION BY product_name)) > 0 THEN 'Above Avg'
-		 WHEN current_sales - ROUND(AVG(current_sales) OVER(PARTITION BY product_name)) < 0 THEN 'Below Avg'
+	 WHEN current_sales - ROUND(AVG(current_sales) OVER(PARTITION BY product_name)) < 0 THEN 'Below Avg'
          ELSE 'Avg' 
-	END AS avg_change,
+    END AS avg_change,
     -- Year-over-Year Analysis
     LAG(current_sales) OVER(PARTITION BY product_name ORDER BY order_year) as py_sales,
     current_sales - LAG(current_sales) OVER(PARTITION BY product_name ORDER BY order_year) as diff_py,
     CASE WHEN current_sales - LAG(current_sales) OVER(PARTITION BY product_name ORDER BY order_year) > 0 THEN 'Increase'
-		 WHEN current_sales - LAG(current_sales) OVER(PARTITION BY product_name ORDER BY order_year) < 0 THEN 'Decrease'
+	 WHEN current_sales - LAG(current_sales) OVER(PARTITION BY product_name ORDER BY order_year) < 0 THEN 'Decrease'
          ELSE 'No change' 
-	END AS py_change
+    END AS py_change
 FROM yearly_product_sales
 ORDER BY product_name, order_year;
 
@@ -187,14 +187,14 @@ WITH product_segments AS (
 		product_name,
 		cost,
 		CASE WHEN cost < 100 THEN 'Below 100'
-			 WHEN cost BETWEEN 100 and 500 THEN '100-500'
-			 WHEN cost BETWEEN 500 and 1000 THEN '500-1000'
-			 ELSE 'Above 1000'
+		     WHEN cost BETWEEN 100 and 500 THEN '100-500'
+		     WHEN cost BETWEEN 500 and 1000 THEN '500-1000'
+		     ELSE 'Above 1000'
 		END AS cost_range
 	FROM dim_products)
 
 SELECT 
-	cost_range,
+    cost_range,
     COUNT(product_key) AS total_products
 FROM product_segments
 GROUP BY cost_range
@@ -208,7 +208,7 @@ And find the total number of customers by each group
 */
 WITH customer_spending AS(
 SELECT 
-	customer_key,
+    customer_key,
     MIN(order_date) AS first_order,
     MAX(order_date) AS last_order,
     PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM MAX(order_date)), EXTRACT(YEAR_MONTH FROM MIN(order_date))) AS lifespan,
@@ -220,17 +220,17 @@ ORDER BY customer_key
 )
 , customer_segments AS (
 SELECT 
-	customer_key,
+    customer_key,
     lifespan,
     total_spending,
 	CASE WHEN lifespan >= 12 AND total_spending > 5000 THEN 'VIP'
-         WHEN lifespan >= 12 AND total_spending <= 5000 THEN 'Regular'
-         WHEN lifespan < 12  THEN 'New'
+             WHEN lifespan >= 12 AND total_spending <= 5000 THEN 'Regular'
+             WHEN lifespan < 12  THEN 'New'
 	END AS customer_category
 FROM customer_spending)
 
 SELECT 
-	customer_category,
+    customer_category,
     COUNT(customer_key) AS total_customers
 FROM customer_segments
 GROUP BY customer_category
