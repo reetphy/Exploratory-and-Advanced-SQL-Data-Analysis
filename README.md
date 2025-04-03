@@ -1,4 +1,6 @@
-# **Motogear International - Sales & Customer Analysis** 🏍️💰  
+# **Motogear International - Sales & Customer Analysis** 🏍️💰
+Motogear International, a premier supplier of high-performance bikes and accessories, has been at the forefront of innovation and customer satisfaction. With a diverse product range spanning mountain bikes, road bikes, essential bike accessories, components and clothing, the company has expanded its market presence across 🇦🇺 Australia  🇺🇸 USA  🇨🇦 Canada  🇩🇪 Germany 🇬🇧 UK and  🇫🇷 France 
+
 🚀 **Project Type**: SQL Analysis | MySQL | Data Analytics  
 
 📊 **Objective**: Perform **exploratory and advanced data analysis** to extract insights from customer, product, and sales data, helping to drive business decisions.  
@@ -26,10 +28,7 @@ Here are some key performance indicators derived from the dataset:
 ---
 
 ## **📂 Dataset Overview**  
-The dataset represents **Motogear International’s** customer base, product catalog, and sales transactions from **2010-12-29 to 2014-01-28**, with products sold across **six countries**:  
-🇦🇺 Australia | 🇺🇸 USA | 🇨🇦 Canada | 🇩🇪 Germany | 🇬🇧 UK | 🇫🇷 France   
-
-It consists of three key tables:  
+The dataset represents **Motogear International’s** customer base, product catalog, and sales transactions from **2010-12-29 to 2014-01-28**, with products sold across **six countries**.  It consists of three key tables:  
 
 ### **1️⃣ dim_customers** (Customer Dimension)  
 Stores customer details, including demographics and account creation data.  
