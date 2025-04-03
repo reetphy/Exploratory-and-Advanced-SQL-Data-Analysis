@@ -16,8 +16,8 @@ Highlights:
 	   - lifespan (in months)
     4. Calculates valuable KPIs:
 	    - recency (months since last order)
-		- average order value
-		- average monthly spend
+	    - average order value
+	    - average monthly spend
 ===============================================================================
 */
 
@@ -40,7 +40,7 @@ SELECT
 	c.customer_key,
 	c.customer_number,
 	CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-    TIMESTAMPDIFF(YEAR, c.birthdate, CURDATE()) AS age
+        TIMESTAMPDIFF(YEAR, c.birthdate, CURDATE()) AS age
 FROM fact_sales f
 LEFT JOIN dim_customers c
 ON c.customer_key = f.customer_key
@@ -61,7 +61,7 @@ SELECT
 	SUM(quantity) AS total_quantity,
 	COUNT(DISTINCT product_key) AS total_products,
 	MAX(order_date) AS last_order_date,
-    PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM MAX(order_date)), EXTRACT(YEAR_MONTH FROM MIN(order_date))) AS lifespan
+        PERIOD_DIFF(EXTRACT(YEAR_MONTH FROM MAX(order_date)), EXTRACT(YEAR_MONTH FROM MIN(order_date))) AS lifespan
 FROM base_query
 GROUP BY 
 	customer_key,
